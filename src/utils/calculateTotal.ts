@@ -18,7 +18,7 @@ const filterPriceConfigs = (
 ): PriceConfig[] => {
   // FILTER BY MINIMUM REQUIRED
   const priceConfigsByMinimum = priceConfigs.filter(
-    (config) => config.minRequired >= quantity,
+    (config) => quantity >= config.minRequired,
   );
 
   // FILTER BY PRIORITY
@@ -37,7 +37,7 @@ const calculateTotal = (
 ) => {
   try {
     if (isNaN(quantity) || quantity === 0) {
-      return dineroFromFloat(0);
+      return { total: dineroFromFloat(0) };
     }
 
     const filteredConfigs = filterPriceConfigs(priceConfigs, quantity);
@@ -47,15 +47,18 @@ const calculateTotal = (
     let modifiedPrice = price;
 
     if (isEmpty(filteredConfigs)) {
-      return multiply(modifiedPrice, modifiedQuantity);
+      return { total: multiply(modifiedPrice, modifiedQuantity) };
     }
 
     for (const config of filteredConfigs) {
-      const { reductionModifier } = config;
+      const { reductionModifier, minRequired } = config;
 
       switch (config.reductionType) {
         case ReductionType.FREE_PER_X:
-          modifiedQuantity = quantity - Math.floor(quantity / reductionModifier);
+          if (minRequired === 0) {
+            throw 'reductionModifier can not be 0';
+          }
+          modifiedQuantity = quantity - Math.floor(quantity / minRequired);
           break;
 
         // Only apply to original price
@@ -65,7 +68,13 @@ const calculateTotal = (
 
         // Only apply to original price
         case ReductionType.PERCENT: {
-          const [d1] = allocate(price, [Math.floor(reductionModifier)]);
+          if (reductionModifier > 100) {
+            throw 'reductionModifier can not be bigger than 100';
+          }
+          const [d1] = allocate(price, [
+            100 - Math.floor(reductionModifier),
+            Math.floor(reductionModifier),
+          ]);
           modifiedPrice = d1;
           break;
         }
@@ -80,12 +89,12 @@ const calculateTotal = (
       }
     }
 
-    return multiply(modifiedPrice, modifiedQuantity);
+    return { total: multiply(modifiedPrice, modifiedQuantity), configs: filteredConfigs };
   } catch (error) {
     alert(String(error));
   }
 
-  return dineroFromFloat(0);
+  return { total: dineroFromFloat(0) };
 };
 
 export default calculateTotal;

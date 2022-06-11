@@ -1,6 +1,18 @@
+import flattenDeep from 'lodash/flattenDeep';
 import React from 'react';
+import { useSelector } from 'react-redux';
+import { selectPricingConfigs } from 'selectors/pricingConfigSelectors';
+import { PriceConfig } from 'slices/priceConfigSlice';
+
+import PriceConfigListItem from './PriceConfigListItem';
 
 export default function PriceConfigList() {
+  const priceConfigs = useSelector(selectPricingConfigs);
+
+  const list: PriceConfig[] = flattenDeep(
+    Object.values(priceConfigs).map((e) => Object.values(e).map((i) => Object.values(i))),
+  );
+
   return (
     <div
       style={{
@@ -17,16 +29,12 @@ export default function PriceConfigList() {
           <th>Modifier</th>
           <th>Minimum Required</th>
           <th>Priority</th>
+          <th></th>
         </tr>
-        <tr>
-          <td>microsoft buy 1 get 1</td>
-          <td>microsoft</td>
-          <td>Large</td>
-          <td>Free per x</td>
-          <td>N/A</td>
-          <td>1</td>
-          <td>1</td>
-        </tr>
+
+        {list.map((e, index) => (
+          <PriceConfigListItem key={index} config={e}></PriceConfigListItem>
+        ))}
       </table>
     </div>
   );

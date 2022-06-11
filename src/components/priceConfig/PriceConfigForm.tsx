@@ -79,7 +79,7 @@ export default function PriceConfigForm() {
         <input
           required
           id="modifier"
-          type="number"
+          type="float"
           name="modifier"
           min={0}
           placeholder="Quantity | Amount | Percent | Price"

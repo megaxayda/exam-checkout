@@ -16,7 +16,7 @@ export default function Checkout() {
   const [mediumQuantity, setMediumQuantity] = useState<number>();
   const [largeQuantity, setLargeQuantity] = useState<number>();
 
-  const total = useCalculateTotal(
+  const { total, configs } = useCalculateTotal(
     customerType,
     smallQuantity,
     mediumQuantity,
@@ -68,6 +68,7 @@ export default function Checkout() {
             <input
               value={smallQuantity}
               type="number"
+              min={0}
               onChange={(e) => {
                 setSmallQuantity(Number(e.target.value));
               }}
@@ -81,6 +82,7 @@ export default function Checkout() {
             <input
               value={mediumQuantity}
               type="number"
+              min={0}
               onChange={(e) => {
                 setMediumQuantity(Number(e.target.value));
               }}
@@ -94,6 +96,7 @@ export default function Checkout() {
             <input
               value={largeQuantity}
               type="number"
+              min={0}
               onChange={(e) => {
                 setLargeQuantity(Number(e.target.value));
               }}
@@ -104,7 +107,9 @@ export default function Checkout() {
 
       <h4>Applied: </h4>
       <ol>
-        <li>microsoft buy 1 get 1</li>
+        {configs?.map((e, index) => (
+          <li key={index}>{e.name}</li>
+        ))}
       </ol>
 
       <h3>Total: {toFormat(total, transformer)}</h3>

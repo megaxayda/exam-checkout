@@ -16,24 +16,33 @@ export default function useCalculateTotal(
   const pricingConfigs = useSelector(selectPricingConfigs);
 
   if (isNil(customerType)) {
-    return dineroFromFloat(0);
+    return { total: dineroFromFloat(0) };
   }
 
-  const totalSmall = calculateTotal(
-    get(pricingConfigs, `[${customerType}][${PizzaSize.SMALL}]`, []) as PriceConfig[],
+  const { total: totalSmall, configs: appliedConfigsSmall = [] } = calculateTotal(
+    Object.values(
+      get(pricingConfigs, `[${customerType}][${PizzaSize.SMALL}]`, {}),
+    ) as unknown as PriceConfig[],
     PizzaSize.SMALL,
     smallQuantity,
   );
-  const totalMedium = calculateTotal(
-    get(pricingConfigs, `[${customerType}][${PizzaSize.MEDIUM}]`, []) as PriceConfig[],
+  const { total: totalMedium, configs: appliedConfigsMedium = [] } = calculateTotal(
+    Object.values(
+      get(pricingConfigs, `[${customerType}][${PizzaSize.MEDIUM}]`, {}),
+    ) as unknown as PriceConfig[],
     PizzaSize.MEDIUM,
     mediumQuantity,
   );
-  const totalLarge = calculateTotal(
-    get(pricingConfigs, `[${customerType}][${PizzaSize.LARGE}]`, []) as PriceConfig[],
+  const { total: totalLarge, configs: appliedConfigsLarge = [] } = calculateTotal(
+    Object.values(
+      get(pricingConfigs, `[${customerType}][${PizzaSize.LARGE}]`, {}),
+    ) as unknown as PriceConfig[],
     PizzaSize.LARGE,
     largeQuantity,
   );
 
-  return add(add(totalSmall, totalMedium), totalLarge);
+  return {
+    total: add(add(totalSmall, totalMedium), totalLarge),
+    configs: [...appliedConfigsSmall, ...appliedConfigsMedium, ...appliedConfigsLarge],
+  };
 }
