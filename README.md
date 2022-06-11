@@ -5,7 +5,7 @@
 ## Preview
 https://exam-checkout.netlify.app/
 
-![image](https://user-images.githubusercontent.com/20489253/173201572-edca4416-b146-4855-83e7-b8020d426a72.png)
+![image](https://user-images.githubusercontent.com/20489253/173201624-71df31f3-e229-49a4-a1e2-ab6c0627441f.png)
 
 ## Installation
 
