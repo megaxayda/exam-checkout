@@ -10,13 +10,14 @@ import {
   REHYDRATE,
 } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
+import priceConfigSlice from 'slices/priceConfigSlice';
 
-const rootReducer = combineReducers({});
+const rootReducer = combineReducers({ priceConfig: priceConfigSlice });
 
 const persistConfig = {
   key: 'root',
   storage,
-  // blacklist: ['consent'], // navigation will not be persisted
+  blacklist: ['priceConfig'], // navigation will not be persisted
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

@@ -1,8 +1,31 @@
 import { PizzaSize, reductionTypeOption } from 'constants/enum';
 import capitalize from 'lodash/capitalize';
-import React from 'react';
+import React, { FormEvent } from 'react';
+import { useDispatch } from 'react-redux';
+import { savePriceConfig } from 'slices/priceConfigSlice';
 
 export default function PriceConfigForm() {
+  const dispatch = useDispatch();
+
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    dispatch(
+      savePriceConfig({
+        name: e.currentTarget.ruleName.value,
+        customerType: e.currentTarget.customerType.value,
+        pizzaSize: e.currentTarget.size.value,
+        reductionType: e.currentTarget.reductionType.value,
+        reductionModifier: e.currentTarget.modifier.value,
+        minRequired: e.currentTarget.min.value,
+        priority: e.currentTarget.priority.value,
+      }),
+    );
+
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    document.getElementById('priceConfigForm').reset();
+  };
+
   return (
     <div
       style={{
@@ -12,6 +35,8 @@ export default function PriceConfigForm() {
       }}
     >
       <form
+        id="priceConfigForm"
+        onSubmit={handleSubmit}
         style={{
           display: 'flex',
           flexDirection: 'column',
@@ -22,8 +47,8 @@ export default function PriceConfigForm() {
         <h2>Add new price config</h2>
 
         {/* NAME */}
-        <label htmlFor="name">Name: </label>
-        <input required id="name" type="text" name="name"></input>
+        <label htmlFor="ruleName">Name: </label>
+        <input required id="ruleName" type="text" name="ruleName"></input>
 
         {/* CUSTOMER TYPE */}
         <label htmlFor="customerType">Customer type: </label>
