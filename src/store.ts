@@ -17,7 +17,7 @@ const rootReducer = combineReducers({ priceConfig: priceConfigSlice });
 const persistConfig = {
   key: 'root',
   storage,
-  blacklist: ['priceConfig'], // navigation will not be persisted
+  // blacklist: ['priceConfig'], // navigation will not be persisted
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

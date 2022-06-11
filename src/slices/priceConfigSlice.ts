@@ -1,5 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { PizzaSize, ReductionType } from 'constants/enum';
+import get from 'lodash/get';
+import isEmpty from 'lodash/isEmpty';
 import set from 'lodash/set';
 
 export type PriceConfig = {
@@ -13,7 +15,7 @@ export type PriceConfig = {
 };
 
 type PriceConfigByPizzaSize = {
-  [size: string]: PriceConfig;
+  [size: string]: PriceConfig[];
 };
 
 type PriceConfigByPizzaSizeByCustomer = {
@@ -34,9 +36,16 @@ export const priceConfigSlice = createSlice({
   reducers: {
     savePriceConfig: (state, action: PayloadAction<PriceConfig>) => {
       const { customerType, pizzaSize } = action.payload;
-      console.log(action.payload);
-      set(state.priceConfigs, `[${customerType}][${pizzaSize}]`, action.payload);
-      // state.priceConfigs[customerType][String(pizzaSize)] = action.payload;
+
+      const currentList = get(state.priceConfigs, `[${customerType}][${pizzaSize}]`, []);
+
+      if (isEmpty(currentList)) {
+        set(state.priceConfigs, `[${customerType}][${pizzaSize}]`, [action.payload]);
+      } else {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        //@ts-ignore
+        currentList.push(action.payload);
+      }
     },
   },
 });

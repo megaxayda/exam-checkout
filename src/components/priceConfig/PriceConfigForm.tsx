@@ -15,15 +15,15 @@ export default function PriceConfigForm() {
         customerType: e.currentTarget.customerType.value,
         pizzaSize: e.currentTarget.size.value,
         reductionType: e.currentTarget.reductionType.value,
-        reductionModifier: e.currentTarget.modifier.value,
-        minRequired: e.currentTarget.min.value,
-        priority: e.currentTarget.priority.value,
+        reductionModifier: Number(e.currentTarget.modifier.value),
+        minRequired: Number(e.currentTarget.min.value),
+        priority: Number(e.currentTarget.priority.value),
       }),
     );
 
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    document.getElementById('priceConfigForm').reset();
+    document && document.getElementById('priceConfigForm').reset();
   };
 
   return (
@@ -76,15 +76,30 @@ export default function PriceConfigForm() {
 
         {/* REDUCTION MODIFIER */}
         <label htmlFor="modifier">Reduction modifier:</label>
-        <input required id="modifier" type="number" name="modifier"></input>
+        <input
+          required
+          id="modifier"
+          type="number"
+          name="modifier"
+          min={0}
+          placeholder="Quantity | Amount | Percent | Price"
+        ></input>
 
         {/* MIN REQUIRED */}
         <label htmlFor="min">Minimum required:</label>
-        <input required id="min" type="number" name="min"></input>
+        <input required id="min" type="number" name="min" min={0}></input>
 
         {/* PRIORITY */}
         <label htmlFor="priority">Priority:</label>
-        <input required id="priority" type="number" name="priority"></input>
+        <input
+          required
+          id="priority"
+          type="number"
+          name="priority"
+          min={1}
+          max={100}
+          placeholder="1~100"
+        ></input>
 
         {/* SUBMIT */}
         <button

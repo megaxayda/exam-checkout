@@ -1,11 +1,32 @@
 import defaultPrice from 'constants/defaultPrice';
 import { toFormat, Transformer } from 'dinero.js';
-import React from 'react';
+import useCalculateTotal from 'hooks/useCalculateTotal';
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { selectAllCustomerTypes } from 'selectors/pricingConfigSelectors';
 
 const transformer: Transformer<number> = (props) =>
   `${props.currency.code} ${props.amount}`;
 
 export default function Checkout() {
+  const customerTypes = useSelector(selectAllCustomerTypes);
+
+  const [customerType, setCustomerType] = useState<string>();
+  const [smallQuantity, setSmallQuantity] = useState<number>();
+  const [mediumQuantity, setMediumQuantity] = useState<number>();
+  const [largeQuantity, setLargeQuantity] = useState<number>();
+
+  const total = useCalculateTotal(
+    customerType,
+    smallQuantity,
+    mediumQuantity,
+    largeQuantity,
+  );
+
+  useEffect(() => {
+    setCustomerType(customerTypes[0]);
+  }, [customerTypes]);
+
   return (
     <div
       style={{
@@ -19,8 +40,19 @@ export default function Checkout() {
       <label htmlFor="customerType" style={{ display: 'block' }}>
         Choose customer type:
       </label>
-      <select id="customerType" name="customerType">
-        <option value={'Microsoft'}>Microsoft</option>
+      <select
+        id="customerType"
+        value={customerType}
+        onChange={(e) => {
+          setCustomerType(e.target.value);
+        }}
+      >
+        <option value={''}>{'Choose customer type'}</option>
+        {customerTypes.map((e) => (
+          <option key={e} value={e}>
+            {e}
+          </option>
+        ))}
       </select>
 
       <table style={{ width: '100%', textAlign: 'left', marginTop: '10px' }}>
@@ -30,24 +62,42 @@ export default function Checkout() {
           <th>Quantity</th>
         </tr>
         <tr>
-          <td>Large Pizza</td>
-          <td>{toFormat(defaultPrice.LARGE, transformer)}</td>
+          <td>Small Pizza</td>
+          <td>{toFormat(defaultPrice.SMALL, transformer)}</td>
           <td>
-            <input name="largeQuantity" type="number"></input>
+            <input
+              value={smallQuantity}
+              type="number"
+              onChange={(e) => {
+                setSmallQuantity(Number(e.target.value));
+              }}
+            ></input>
           </td>
         </tr>
         <tr>
           <td>Medium Pizza</td>
           <td>{toFormat(defaultPrice.MEDIUM, transformer)}</td>
           <td>
-            <input name="largeQuantity" type="number"></input>
+            <input
+              value={mediumQuantity}
+              type="number"
+              onChange={(e) => {
+                setMediumQuantity(Number(e.target.value));
+              }}
+            ></input>
           </td>
         </tr>
         <tr>
-          <td>Small Pizza</td>
-          <td>{toFormat(defaultPrice.SMALL, transformer)}</td>
+          <td>Large Pizza</td>
+          <td>{toFormat(defaultPrice.LARGE, transformer)}</td>
           <td>
-            <input name="largeQuantity" type="number"></input>
+            <input
+              value={largeQuantity}
+              type="number"
+              onChange={(e) => {
+                setLargeQuantity(Number(e.target.value));
+              }}
+            ></input>
           </td>
         </tr>
       </table>
@@ -57,7 +107,7 @@ export default function Checkout() {
         <li>microsoft buy 1 get 1</li>
       </ol>
 
-      <h3>Total: USD 1000.20</h3>
+      <h3>Total: {toFormat(total, transformer)}</h3>
     </div>
   );
 }
