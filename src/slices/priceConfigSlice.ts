@@ -37,8 +37,6 @@ export const priceConfigSlice = createSlice({
     savePriceConfig: (state, action: PayloadAction<PriceConfig>) => {
       const { customerType, pizzaSize, name } = action.payload;
 
-      console.log(action.payload);
-
       set(
         state.priceConfigs,
         `[${customerType}][${pizzaSize}]["${name}"]`,

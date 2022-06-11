@@ -11,7 +11,7 @@ export default function PriceConfigForm() {
     e.preventDefault();
     dispatch(
       savePriceConfig({
-        name: e.currentTarget.ruleName.value,
+        name: String(e.currentTarget.ruleName.value),
         customerType: e.currentTarget.customerType.value,
         pizzaSize: e.currentTarget.size.value,
         reductionType: e.currentTarget.reductionType.value,
