@@ -5,6 +5,8 @@
 ## Preview
 https://exam-checkout.netlify.app/
 
+![image](https://user-images.githubusercontent.com/20489253/173201572-edca4416-b146-4855-83e7-b8020d426a72.png)
+
 ## Installation
 
 Clone the repo and run `yarn install`
