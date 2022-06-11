@@ -1,5 +1,6 @@
 import { PizzaSize, reductionTypeOption } from 'constants/enum';
 import capitalize from 'lodash/capitalize';
+import lowerCase from 'lodash/lowerCase';
 import React, { FormEvent } from 'react';
 import { useDispatch } from 'react-redux';
 import { savePriceConfig } from 'slices/priceConfigSlice';
@@ -12,7 +13,7 @@ export default function PriceConfigForm() {
     dispatch(
       savePriceConfig({
         name: String(e.currentTarget.ruleName.value),
-        customerType: e.currentTarget.customerType.value,
+        customerType: lowerCase(e.currentTarget.customerType.value),
         pizzaSize: e.currentTarget.size.value,
         reductionType: e.currentTarget.reductionType.value,
         reductionModifier: Number(e.currentTarget.modifier.value),
