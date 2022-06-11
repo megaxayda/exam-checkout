@@ -1,0 +1,29 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`calculateTotal calculateTotal should return correct price 1`] = `
+Array [
+  Object {
+    "customerType": "amazon",
+    "minRequired": 10,
+    "name": "amazon 50% if more than 10",
+    "pizzaSize": "SMALL",
+    "priority": 1,
+    "reductionModifier": 50,
+    "reductionType": "PERCENT",
+  },
+]
+`;
+
+exports[`calculateTotal filterPriceConfigs should return correct configs 1`] = `
+Array [
+  Object {
+    "customerType": "amazon",
+    "minRequired": 1,
+    "name": "amazon 20% for 1",
+    "pizzaSize": "SMALL",
+    "priority": 2,
+    "reductionModifier": 20,
+    "reductionType": "PERCENT",
+  },
+]
+`;

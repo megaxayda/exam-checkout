@@ -12,7 +12,7 @@ export const dineroFromFloat = (amount: number) => {
   return dinero({ amount: a, currency: USD });
 };
 
-const filterPriceConfigs = (
+export const filterPriceConfigs = (
   priceConfigs: PriceConfig[],
   quantity: number,
 ): PriceConfig[] => {
@@ -91,7 +91,8 @@ const calculateTotal = (
 
     return { total: multiply(modifiedPrice, modifiedQuantity), configs: filteredConfigs };
   } catch (error) {
-    alert(String(error));
+    console.error(error);
+    alert && alert(String(error));
   }
 
   return { total: dineroFromFloat(0) };

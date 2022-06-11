@@ -1,12 +1,10 @@
 import defaultPrice from 'constants/defaultPrice';
-import { toFormat, Transformer } from 'dinero.js';
+import { toFormat } from 'dinero.js';
 import useCalculateTotal from 'hooks/useCalculateTotal';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { selectAllCustomerTypes } from 'selectors/pricingConfigSelectors';
-
-const transformer: Transformer<number> = (props) =>
-  `${props.currency.code} ${props.amount}`;
+import transformer from 'utils/transformer';
 
 export default function Checkout() {
   const customerTypes = useSelector(selectAllCustomerTypes);
